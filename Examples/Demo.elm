@@ -1,7 +1,8 @@
 module Examples.Demo where
 import Playground(..)
 import Playground.Input(..)
-import Keyboard.Keys as Keys
+import Keyboard.Keys as Key
+import Keyboard.Keys (equals)
 
 -- Define what you want the state of your program to be
 type State = {x : Float, y : Float, c : Color}
@@ -19,15 +20,15 @@ update : RealWorld -> Input -> State -> State
 update rw input state = 
     case input of
       Tap k ->
-          if | Keys.equal k Keys.one -> {state | c <- blue}
-             | Keys.equal k Keys.two -> {state | c <- red}
-             | Keys.equal k Keys.three -> {state | c <- green}
+          if | k `equals` Key.one -> {state | c <- blue}
+             | k `equals` Key.two -> {state | c <- red}
+             | k `equals` Key.three -> {state | c <- green}
              | otherwise -> state
       Key k ->
-          if | Keys.equal k Keys.arrowLeft -> {state | x <- state.x - 5}
-             | Keys.equal k Keys.arrowRight -> {state | x <- state.x + 5}
-             | Keys.equal k Keys.arrowDown ->  {state | y <- state.y - 5}
-             | Keys.equal k Keys.arrowUp -> {state | y <- state.y + 5}
+          if | k `equals` Key.arrowLeft -> {state | x <- state.x - 5}
+             | k `equals` Key.arrowRight -> {state | x <- state.x + 5}
+             | k `equals` Key.arrowDown ->  {state | y <- state.y - 5}
+             | k `equals` Key.arrowUp -> {state | y <- state.y + 5}
              | otherwise -> state
       otherwise -> state
 

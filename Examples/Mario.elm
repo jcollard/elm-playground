@@ -1,7 +1,8 @@
 module Examples.Mario where
 import Playground(..)
 import Playground.Input(..)
-import Keyboard.Keys as Keys
+import Keyboard.Keys as Key
+import Keyboard.Keys (equals)
 
 -- Define what you want the state of your program to be
 type State = { mario : Mario, background : Background}
@@ -42,11 +43,11 @@ update realworld input {mario, background} =
        let mario' =
            case input of
              Key k ->
-                 if | Keys.equal k Keys.arrowLeft -> {mario | vx <- mario.vx - 2, dir <- "left"}
-                    | Keys.equal k Keys.arrowRight -> {mario | vx <- mario.vx + 2, dir <- "right"}
+                 if | k `equals` Key.arrowLeft -> {mario | vx <- mario.vx - 2, dir <- "left"}
+                    | k `equals` Key.arrowRight -> {mario | vx <- mario.vx + 2, dir <- "right"}
                     | otherwise -> mario
              Tap k ->
-                 if | Keys.equal k Keys.arrowUp -> jump mario
+                 if | k `equals` Key.arrowUp -> jump mario
                     | otherwise -> mario
              Passive t -> gravity (t/20) (physics (t/20) mario)
              otherwise -> mario
