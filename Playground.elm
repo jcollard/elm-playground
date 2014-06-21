@@ -84,5 +84,6 @@ Plays a Playground at the specified number of frames per second.
 playWithRate : Time -> Playground state -> Signal Element
 playWithRate rate playground =
     let update = updater playground.update
-        input = (,) <~ realworld ~ inputs rate
+        ins = inputs rate
+        input = (,) <~ sampleOn ins realworld ~ ins
     in uncurry collage <~ Window.dimensions ~ (playground.render <~ foldp update playground.initialState input)
