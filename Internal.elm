@@ -41,13 +41,16 @@ singleton x = [x]
 click : Signal [Input]
 click = singleton <~ sampleOn Mouse.clicks (constant Click)
 
-toInputs : Time -> Input -> [Input] -> [Input]
-toInputs t click keys = (Passive t)::click::keys
+toInputs : Time -> Maybe Input -> [Input] -> [Input]
+toInputs t click keys = 
+    case click of
+      Nothing -> (Passive t)::keys
+      Just c -> (Passive t)::c::keys
 
 withRate : Time -> Signal [Input]
 withRate rate = 
     let rate' = fps rate in
-    toInputs <~ rate' ~ (dropRepeats (sampleOn Mouse.clicks (constant MouseDown))) ~ keysDown
+    toInputs <~ rate' ~ (merges [sampleOn Mouse.clicks (constant (Just MouseDown)), sampleOn (Time.delay 1 Mouse.clicks) (constant Nothing)]) ~ keysDown
 
 -- Define Keyboard Inputs
 lastPressed : Signal [Input]
