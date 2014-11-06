@@ -50,7 +50,10 @@ toInputs t click keys =
 withRate : Time -> Signal [Input]
 withRate rate = 
     let rate' = fps rate in
-    toInputs <~ rate' ~ (merges [sampleOn Mouse.clicks (constant (Just MouseDown)), sampleOn (Time.delay 1 Mouse.clicks) (constant Nothing)]) ~ keysDown
+    toInputs <~ rate' ~ (getMouseDown <~ Mouse.isDown) ~ keysDown
+
+getMouseDown : Bool -> Maybe Input
+getMouseDown x = if x then Just MouseDown else Nothing
 
 -- Define Keyboard Inputs
 lastPressed : Signal [Input]
