@@ -50,7 +50,7 @@ toInputs t click keys =
 withRate : Time -> Signal [Input]
 withRate rate = 
     let rate' = fps rate in
-    toInputs <~ rate' ~ (dropRepeats (getMouseDown <~ Mouse.isDown)) ~ (dropRepeats keysDown)
+    sampleOn rate' (toInputs <~ rate' ~ (dropRepeats (getMouseDown <~ Mouse.isDown)) ~ (dropRepeats keysDown))
 
 getMouseDown : Bool -> Maybe Input
 getMouseDown x = if x then Just MouseDown else Nothing
