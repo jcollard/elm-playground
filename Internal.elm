@@ -29,10 +29,10 @@ realworld : Signal RealWorld
 realworld = toRealWorld <~ Window.dimensions ~ Mouse.position
 
 updater : (RealWorld -> Input -> state -> state) -> (RealWorld, [Input]) -> state -> state
-updater update (rw, is) state = foldl (update rw) (Debug.watch "State" state) is
+updater update (rw, is) state = foldl (update rw) (Debug.watch "State" state) (Debug.watch "Inputs" is)
 
 inputs : Time -> Signal [Input]
-inputs rate = merges (Debug.watch "Inputs" [click, lastPressed, withRate rate])
+inputs rate = merges [click, lastPressed, withRate rate]
 
 singleton : a -> [a]
 singleton x = [x]
