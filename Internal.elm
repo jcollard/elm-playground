@@ -9,29 +9,30 @@ import Mouse
 import Window
 import Time
 import Set
+import Debug
 
 toRealWorld : (Int, Int) -> (Int, Int) -> RealWorld
-toRealWorld (width, height) (x, y) = 
+toRealWorld (width, height) (x, y) =
     let top = (toFloat height)/2
         bottom = -top
         right = (toFloat width)/2
         left = -right
         mouseX = (toFloat x) + left
         mouseY = top - (toFloat y)
-    in { top = top,
-         right = right,
-         bottom = bottom,
-         left = left,
-         mouse = {x = mouseX, y = mouseY}}
+    in Debug.watch "RealWorld" { top = top,
+                                 right = right,
+                                 bottom = bottom,
+                                 left = left,
+                                 mouse = {x = mouseX, y = mouseY}}
 
 realworld : Signal RealWorld
 realworld = toRealWorld <~ Window.dimensions ~ Mouse.position
 
 updater : (RealWorld -> Input -> state -> state) -> (RealWorld, [Input]) -> state -> state
-updater update (rw, is) state = foldl (update rw) state is
+updater update (rw, is) state = foldl (update rw) (Debug.watch "State" state) is
 
 inputs : Time -> Signal [Input]
-inputs rate = merges [click, lastPressed, withRate rate]
+inputs rate = merges (Debug.watch "Inputs" [click, lastPressed, withRate rate])
 
 singleton : a -> [a]
 singleton x = [x]
