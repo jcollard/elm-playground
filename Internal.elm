@@ -47,7 +47,7 @@ toInputs t click keys = (Passive t)::click::keys
 withRate : Time -> Signal [Input]
 withRate rate = 
     let rate' = fps rate in
-    toInputs <~ rate' ~ (sampleOn Mouse.clicks (constant MouseDown)) ~ keysDown
+    toInputs <~ rate' ~ (dropRepeats (sampleOn Mouse.clicks (constant MouseDown))) ~ keysDown
 
 -- Define Keyboard Inputs
 lastPressed : Signal [Input]
