@@ -14,8 +14,8 @@ initialState = { mario = { x=0, y=0, vx=0, vy=0, dir="right" },
                  background = {w = 0, h = 0}}
 
 -- Define how the state of your program should be rendered
-render : State -> [Form]
-render {mario, background} =
+render : RealWorld -> State -> [Form]
+render rw {mario, background} =
   let (w,h) = (background.w, background.h)
       verb = if | mario.y  >  0 -> "jump"
                 | mario.vx /= 0 -> "walk"

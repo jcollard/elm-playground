@@ -65,7 +65,7 @@ must specify three fields: initialState, render, and update.
   a State to update, and returns the updated State. All possible Inputs are 
   defined in Playground.Input. The RealWorld is defined in Playground.Input.
 -}
-type Playground state = { render : state -> [Form],
+type Playground state = { render : RealWorld -> state -> [Form],
                           initialState : state,
                           update : RealWorld -> Input -> state -> state }
                                
@@ -86,4 +86,4 @@ playWithRate rate playground =
     let update = updater playground.update
         ins = inputs rate
         input = (,) <~ sampleOn ins realworld ~ ins
-    in uncurry collage <~ Window.dimensions ~ (playground.render <~ foldp update playground.initialState input)
+    in uncurry collage <~ Window.dimensions ~ (playground.render <~ realworld ~ foldp update playground.initialState input)

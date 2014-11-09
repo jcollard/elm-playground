@@ -11,6 +11,6 @@ update realworld input state =
                 | otherwise -> state
     otherwise -> state + 1
 
-render state = [asText state |> toForm]
+render rw state = [asText state |> toForm]
 
 main = play { render = render, update = update, initialState = 0 }
