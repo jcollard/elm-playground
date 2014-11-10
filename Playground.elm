@@ -31,7 +31,7 @@ main = play { render = render, update = update, initialState = 0 }
 
 ## Playing a Playground
 
-@docs play, playWithRate
+@docs play, Options, defaultOptions, playWithOptions
 
 ## Examples
 * Increment
@@ -71,7 +71,7 @@ type Playground state = { render : RealWorld -> state -> [Form],
                                
 
 {-|
-Plays a Playground record at 60 frames per second.
+Plays a Playground with the `defaultOptions`.
 -}
 play : Playground state -> Signal Element
 play = playWithOptions defaultOptions
@@ -90,13 +90,38 @@ playWithOptions options playground =
             ~ (playground.render <~ rw
                                   ~ foldp update playground.initialState input)
 
+{-|
+  Options that may be used when running a playground.
 
+* `debugRealWorld` If true, enables a Watch on the RealWorld when debugging in `elm-reactor`.
+
+* `debugState` If true, enables a Watch on the state of the program in `elm-reactor`.
+
+* `debugInput` If true, enables a Watch on the Input to the program in `elm-reactor`.
+
+* `traceForms` If true, traces all forms when run in `elm-reactor`.
+
+* `rate` Specify the desired frames per second to attempt to run the playground with.
+ -}
 type Options = { debugRealWorld : Bool,
                  debugState : Bool,
                  debugInput : Bool,
                  traceForms : Bool,
                  rate : Time }
 
+{-|
+  The default options which can be used to easily specify which options you would like
+  to use when running with `playWithOptions`. For example, if you want to run at
+  30 frames per second and debug the state of the program, you could do the following:
+
+```
+main = 
+  let options = { defaultOptions | debugState <- True
+                                 , rate <- 30 }
+  in playWithOptions { render = render, update = update, initialState = 0 }
+```
+
+ -}
 defaultOptions = { debugRealWorld = False,
                    debugState = False,
                    debugInput = False,
