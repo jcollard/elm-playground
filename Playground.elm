@@ -74,7 +74,7 @@ type Playground state = { render : RealWorld -> state -> [Form],
 Plays a Playground record at 60 frames per second.
 -}
 play : Playground state -> Signal Element
-play = playWithOptions defaultFlags
+play = playWithOptions defaultOptions
 
 {-|
 Plays a Playground at the specified options.
@@ -83,8 +83,12 @@ playWithOptions : Options -> Playground state -> Signal Element
 playWithOptions options playground =
     let update = updater options.debugInput options.debugState playground.update
         ins = inputs options.rate
-        input = (,) <~ sampleOn ins (realworld options.debugRealWorld) ~ ins
-    in draw options.traceForms <~ Window.dimensions ~ (playground.render <~ (realworld options.debugRealWorld) ~ foldp update playground.initialState input)
+        rw = realworld options.debugRealWorld
+        input = (,) <~ sampleOn ins rw ~ ins
+    in draw options.traceForms 
+           <~ Window.dimensions 
+            ~ (playground.render <~ rw
+                                  ~ foldp update playground.initialState input)
 
 
 type Options = { debugRealWorld : Bool,
@@ -93,9 +97,9 @@ type Options = { debugRealWorld : Bool,
                  traceForms : Bool,
                  rate : Time }
 
-defaultFlags = { debugRealWorld = False,
-                 debugState = False,
-                 debugInput = False,
-                 traceForms = False,
-                 rate = 60 }
+defaultOptions = { debugRealWorld = False,
+                   debugState = False,
+                   debugInput = False,
+                   traceForms = False,
+                   rate = 60 }
 

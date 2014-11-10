@@ -13,7 +13,7 @@ import Debug
 
 draw : Bool -> (Int, Int) -> [Form] -> Element
 draw traceForms (w, h) fs =
-    let forms = if traceForms then map (Debug.trace "forms") fs else forms
+    let forms = if traceForms then map (Debug.trace "forms") fs else fs
     in collage w h forms
 
 debugToRealWorld : (Int, Int) -> (Int, Int) -> RealWorld
@@ -35,13 +35,13 @@ toRealWorld (width, height) (x, y) =
 
 realworld : Bool -> Signal RealWorld
 realworld debug = 
-    let toLift = if debug then debugToRealWorld else toRealWorld
-    in toLift <~ Window.dimensions ~ Mouse.position
+    let trw = if debug then debugToRealWorld else toRealWorld
+    in trw <~ Window.dimensions ~ Mouse.position
 
 updater : Bool -> Bool -> (RealWorld -> Input -> state -> state) -> (RealWorld, [Input]) -> state -> state
-updater watchInputs watchState update (rw, is) state =
-    let state' = if watchState then (Debug.watch "State" state) else state
-        is' = if watchInputs then (Debug.watch "Inputs" is) else is
+updater watchInputs watchState update (rw, is) state = 
+    let is' = if watchInputs then Debug.watch "Inputs" is else is
+        state' = if watchState then Debug.watch "State" state else state
     in foldl (update rw) state' is'
 
 inputs : Time -> Signal [Input]
