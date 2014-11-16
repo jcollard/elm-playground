@@ -9,6 +9,15 @@ import Mouse
 import Window
 import Time
 import Set
+import Debug
+
+draw : Bool -> (Int, Int) -> [Form] -> Element
+draw traceForms (w, h) fs =
+    let forms = if traceForms then map (Debug.trace "forms") fs else fs
+    in collage w h forms
+
+debugToRealWorld : (Int, Int) -> (Int, Int) -> RealWorld
+debugToRealWorld dim pos = Debug.watch "Real World" <| toRealWorld dim pos
 
 toRealWorld : (Int, Int) -> (Int, Int) -> RealWorld
 toRealWorld (width, height) (x, y) =
@@ -24,11 +33,16 @@ toRealWorld (width, height) (x, y) =
          left = left,
          mouse = {x = mouseX, y = mouseY} }
 
-realworld : Signal RealWorld
-realworld = toRealWorld <~ Window.dimensions ~ Mouse.position
+realworld : Bool -> Signal RealWorld
+realworld debug = 
+    let trw = if debug then debugToRealWorld else toRealWorld
+    in trw <~ Window.dimensions ~ Mouse.position
 
-updater : (RealWorld -> Input -> state -> state) -> (RealWorld, [Input]) -> state -> state
-updater update (rw, is) state = foldl (update rw) state is
+updater : Bool -> Bool -> (RealWorld -> Input -> state -> state) -> (RealWorld, [Input]) -> state -> state
+updater watchInputs watchState update (rw, is) state = 
+    let is' = if watchInputs then Debug.watch "Inputs" is else is
+        state' = if watchState then Debug.watch "State" state else state
+    in foldl (update rw) state' is'
 
 inputs : Time -> Signal [Input]
 inputs rate = merges [click, lastPressed, withRate rate]
