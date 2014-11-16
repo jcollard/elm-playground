@@ -34,7 +34,7 @@ type RealWorld = { top : Float,
 
   * Tap k - Fires once when `k` is pressed
   * Key k - Fires every time the update function is called while `k` is pressed
-  * Click - Fires once when the mouse is clicked
+  * MouseUp - Fires once when the left mouse button is released
   * MouseDown - Fires every time the update function is called while the mouse is down
   * Passive t - This input is always passed to the update function and expresses
     how many milliseconds have passed since the last update was accumulated.
@@ -43,6 +43,6 @@ type RealWorld = { top : Float,
  -}
 data Input = Tap Keys.Key
            | Key Keys.Key
-           | Click
+           | MouseUp
            | MouseDown
            | Passive Time

@@ -38,7 +38,7 @@ singleton x = [x]
 
 -- Define Mouse Inputs
 click : Signal [Input]
-click = singleton <~ sampleOn Mouse.clicks (constant Click)
+click = singleton <~ sampleOn Mouse.clicks (constant MouseUp)
 
 toInputs : Time -> Maybe Input -> [Input] -> [Input]
 toInputs t click keys = 
