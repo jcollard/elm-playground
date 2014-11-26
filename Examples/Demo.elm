@@ -3,14 +3,17 @@ import Playground(..)
 import Playground.Input(..)
 import Keyboard.Keys as Key
 import Keyboard.Keys (equals)
+import Graphics.Collage (Form, circle, filled, move)
+import Color (Color, blue, red, green)
+import Graphics.Element (Element)
 
 -- Define what you want the state of your program to be
-type State = {x : Float, y : Float, c : Color}
+type alias State = {x : Float, y : Float, c : Color}
 initialState : State
 initialState = {x = 0, y = 0, c = blue}
 
 -- Define how the state of your program should be rendered
-render : RealWorld -> State -> [Form]
+render : RealWorld -> State -> List Form
 render rw state = 
     let shape = circle 50 |> filled state.c |> move (state.x, state.y) 
     in [shape]
