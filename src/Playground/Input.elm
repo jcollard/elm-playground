@@ -1,5 +1,7 @@
-module Playground.Input where
+module Playground.Input (..) where
+
 import Keyboard.Keys as Keys
+import Time (Time)
 
 {-|
   This module explains each type of Input that can be used in a Playground's
@@ -19,11 +21,11 @@ import Keyboard.Keys as Keys
   * The `mouse` field is a record containing the most recent x and y positions
     of the mouse within the rendered bounding box.
  -}
-type RealWorld = { top : Float,
-                   right : Float,
-                   bottom : Float,
-                   left : Float,
-                   mouse : { x : Float, y : Float } }
+type alias RealWorld = { top : Float
+                       , right : Float
+                       , bottom : Float
+                       , left : Float
+                       , mouse : { x : Float, y : Float } }
 
 
 {-|
@@ -41,7 +43,7 @@ type RealWorld = { top : Float,
 
 
  -}
-data Input = Tap Keys.Key
+type Input = Tap Keys.Key
            | Key Keys.Key
            | MouseUp
            | MouseDown

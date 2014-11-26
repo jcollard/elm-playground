@@ -1,4 +1,5 @@
-module Playground where
+module Playground (Playground, play, playWithOptions, 
+                   Options, defaultOptions) where
 
 {-|
 The Playground Library is a layer that abstracts away the need to write explicit
@@ -35,14 +36,17 @@ main = play { render = render, update = update, initialState = 0 }
 
 ## Examples
 * Increment
-  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Increment.html)
-  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Increment.elm)
+  - Watch a number increase in the center of the screen, press space bar to reset to 0.
+  - [See It Running](http://jcollard.github.io/elm/Playground/Increment.html)
+  - [Source](https://github.com/jcollard/elm-playground/blob/master/Examples/Increment.elm)
 * Ball
-  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Demo.html)
-  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Demo.elm)
+  - Move the ball around the screen with the arrow keys, make it change colors with 1, 2, or 3.
+  - [See It Running!](http://jcollard.github.io/elm/Playground/Demo.html)
+  - [Source](https://github.com/jcollard/elm-playground/blob/master/Examples/Demo.elm)
 * Mario
-  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Mario.html)
-  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Mario.elm)
+  - The classic Mario example using Elm Playground
+  - [See It Running!](http://jcollard.github.io/elm/Playground/Mario.html)
+  - [Source](https://github.com/jcollard/elm-playground/blob/master/Examples/Mario.elm)
 
 
 -}
@@ -50,6 +54,10 @@ main = play { render = render, update = update, initialState = 0 }
 import Internal(..)
 import Playground.Input(..)
 import Window
+import Graphics.Collage (Form)
+import Time (Time)
+import Graphics.Element (Element)
+import Signal (Signal, (<~), (~), sampleOn, foldp)
 
 {-|
 A Playground record defines the execution path for a program. To create one, you
@@ -65,9 +73,9 @@ must specify three fields: initialState, render, and update.
   a State to update, and returns the updated State. All possible Inputs are 
   defined in Playground.Input. The RealWorld is defined in Playground.Input.
 -}
-type Playground state = { render : RealWorld -> state -> [Form],
-                          initialState : state,
-                          update : RealWorld -> Input -> state -> state }
+type alias Playground state = { render : RealWorld -> state -> List Form
+                              , initialState : state
+                              , update : RealWorld -> Input -> state -> state }
                                
 
 {-|
@@ -93,21 +101,22 @@ playWithOptions options playground =
 {-|
   Options that may be used when running a playground.
 
-* `debugRealWorld` If true, enables a Watch on the RealWorld when debugging in `elm-reactor`.
+* `debugRealWorld` If true, enables a Debug.Watch on the RealWorld when debugging in `elm-reactor`.
 
-* `debugState` If true, enables a Watch on the state of the program in `elm-reactor`.
+* `debugState` If true, enables a Debug.Watch on the state of the program in `elm-reactor`.
 
-* `debugInput` If true, enables a Watch on the Input to the program in `elm-reactor`.
+* `debugInput` If true, enables a Debug.Watch on the Input to the program in `elm-reactor`.
 
 * `traceForms` If true, traces all forms when run in `elm-reactor`.
 
 * `rate` Specify the desired frames per second to attempt to run the playground with.
  -}
-type Options = { debugRealWorld : Bool,
-                 debugState : Bool,
-                 debugInput : Bool,
-                 traceForms : Bool,
-                 rate : Time }
+type alias Options = { debugRealWorld : Bool
+                     , debugState : Bool
+                     , debugInput : Bool
+                     , traceForms : Bool
+                     , rate : Time 
+                     }
 
 {-|
   The default options which can be used to easily specify which options you would like
@@ -122,6 +131,7 @@ main =
 ```
 
  -}
+defaultOptions : Options
 defaultOptions = { debugRealWorld = False,
                    debugState = False,
                    debugInput = False,
