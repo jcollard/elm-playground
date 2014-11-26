@@ -1,8 +1,5 @@
 module Playground.Input (..) where
 
-import Keyboard.Keys as Keys
-import Time (Time)
-
 {-|
   This module explains each type of Input that can be used in a Playground's
   update function.
@@ -10,6 +7,10 @@ import Time (Time)
   @docs RealWorld, Input, Key, Direction
 
  -}
+
+
+import Keyboard.Keys as Keys
+import Time (Time)
 
 {-|
   The RealWorld record contains information about the environment of the running
