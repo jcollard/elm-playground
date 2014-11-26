@@ -3,6 +3,9 @@ import Playground(..)
 import Playground.Input(..)
 import Keyboard.Keys as Key
 import Keyboard.Keys (equals)
+import Text (asText)
+import Graphics.Collage (toForm)
+
 -- Increases an Int ~60 times per second. When the space bar is pressed, the Int
 -- resets
 update realworld input state = 

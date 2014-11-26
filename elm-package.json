@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "summary": "Elm Playgrounds abstract the Model, View, Update pattern and hide Signals.",
+    "repository": "https://github.com/jcollard/elm-playground.git",
+    "license": "BSD3",
+    "source-directories": [
+        "src/"
+    ],
+    "exposed-modules": ["Playground", "Playground.Input"],
+    "dependencies": {
+        "jcollard/key-constants": "1.0.0 <= v < 2.0.0",
+        "elm-lang/core": "1.0.0 <= v < 2.0.0"
+    }
+}
