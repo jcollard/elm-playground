@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "summary": "Elm Playgrounds abstract the Model, View, Update pattern and hide Signals.",
     "repository": "https://github.com/jcollard/elm-playground.git",
     "license": "BSD3",
